@@ -6,8 +6,9 @@ import {
 
 export class UpdateOrderDTO {
     @IsNotEmpty()
+    @IsUUID()
     @IsString()
-    client: string;
+    clientId: string;
 
     @IsNotEmpty()
     @IsUUID()

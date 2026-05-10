@@ -1,6 +1,26 @@
 import { PrismaClient } from '@prisma/client';
 const db = new PrismaClient();
 
+function getClients() {
+  return [
+    {
+      id: '529e5d8f-5389-4725-8a95-b90747f64bfb',
+      name: 'John Doe',
+      address: '123 Main Street, London'
+    },
+    {
+      id: 'c94703b5-89c4-44a2-a951-5cbe1af1cac9',
+      name: 'Jane Doe',
+      address: '123 Main Street, London'
+    },
+    {
+      id: '867eea94-5af3-4da1-80c2-e68f5806da37',
+      name: 'Thomas Jefferson',
+      address: 'Baker Street 12B, New York'
+    },
+  ];
+}
+
 function getProducts() {
   return [
     {
@@ -40,26 +60,30 @@ function getOrders() {
   return [
     {
       id: 'fd105551-0f0d-4a9f-bc41-c559c8a17260',
-      client: 'John Doe',
-      address: '123 Main Street, London',
+      clientId: '529e5d8f-5389-4725-8a95-b90747f64bfb',
       productId: 'fd105551-0f0d-4a9f-bc41-c559c8a17256',
     },
     {
       id: 'fd105551-0f0d-4a9f-bc41-c559c8a17261',
-      client: 'Jane Doe',
-      address: '123 Main Street, London',
+      clientId: 'c94703b5-89c4-44a2-a951-5cbe1af1cac9',
       productId: 'fd105551-0f0d-4a9f-bc41-c559c8a17256',
     },
     {
       id: 'fd105551-0f0d-4a9f-bc41-c559c8a17262',
-      client: 'Thomas Jefferson',
-      address: 'Baker Street 12B, New York',
+      clientId: '867eea94-5af3-4da1-80c2-e68f5806da37',
       productId: '01c7599d-318b-4b9f-baf7-51f3a936a2d4',
     },
   ];
 }
 
 async function seed() {
+
+  await Promise.all(
+    getClients().map((client) => {
+      return db.client.create({ data: client });
+    })
+  )
+
   await Promise.all(
     getProducts().map((product) => {
       return db.product.create({ data: product });
@@ -67,13 +91,16 @@ async function seed() {
   );
 
   await Promise.all(
-    getOrders().map(({ productId, ...orderData }) => {
+    getOrders().map(({ productId, clientId, ...orderData }) => {
       return db.order.create({
         data: {
           ...orderData,
           product: {
             connect: { id: productId },
           },
+          client: {
+            connect: {id: clientId }
+          }
         },
       });
     }),

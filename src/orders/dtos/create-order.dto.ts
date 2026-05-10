@@ -1,5 +1,4 @@
 import {
-  isNotEmpty,
   IsNotEmpty,
   IsString,
   IsUUID,
@@ -7,8 +6,9 @@ import {
 
 export class CreateOrderDTO {
     @IsNotEmpty()
+    @IsUUID()
     @IsString()
-    client: string;
+    clientId: string;
 
     @IsNotEmpty()
     @IsUUID()
