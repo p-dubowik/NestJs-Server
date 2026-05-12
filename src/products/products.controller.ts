@@ -34,7 +34,8 @@ export class ProductsController {
 
     @Delete('/:id')
     async deleteById(@Param('id', new ParseUUIDPipe()) id: string) {
-        if(!this.productsService.getById(id)) {
+        const product = await this.productsService.getById(id)
+        if(!product) {
             throw new NotFoundException('Product not found');
         }
         await this.productsService.deleteById(id);
@@ -48,7 +49,8 @@ export class ProductsController {
 
     @Put('/:id')
     async updateById(@Param('id', new ParseUUIDPipe()) id: string, @Body() productData: UpdateProductDTO) {
-        if(!this.productsService.getById(id)) {
+        const product = await this.productsService.getById(id)
+        if(!product) {
             throw new NotFoundException('Product not found');
         }
 

@@ -1,4 +1,3 @@
-import { Transform } from 'class-transformer';
 import {
   IsInt,
   IsNotEmpty,
@@ -20,6 +19,5 @@ export class CreateProductDTO {
 
   @IsNotEmpty()
   @IsString()
-  @Transform(({ value }) => (Array.isArray(value) ? value.join(', ') : ''))
   description: string;
 }

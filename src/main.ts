@@ -9,6 +9,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggerInterceptor());
   app.setGlobalPrefix('api');
 
+  app.enableCors();
+
   await app.enableShutdownHooks();
 
   await app.listen(8000);
